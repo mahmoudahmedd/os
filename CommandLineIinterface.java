@@ -18,23 +18,44 @@ public class CommandLineIinterface
     public static void main(String[] args) throws Exception
     {
         User user       = new User("Mahmoud", "12345");
-        Parser p        = new Parser();
         Terminal t      = new Terminal();
-        Scanner scanner = new Scanner(System.in);
-
         System.out.println("Terminal [Version 1.0.0]");
 
         while(true)
         {
+            Parser p        = new Parser();
+            Scanner scanner = new Scanner(System.in);
+                    
             System.out.print(user.getUserName() + "@" + System.getProperty("os.name") + ":");
             String input = scanner.nextLine();
-
-            if(p.parse(input))
+            
+            String[] instructions = input.split("\\|");
+            
+            if(input.indexOf("more") > 0) 
             {
-                //System.out.println(p.getCmd());
-                //System.out.println(p.getArguments());
+                t.flag = true;
+            }
+            
+            for (String instruction : instructions) 
+            {
+                instruction = instruction.trim();  
                 
-                t.run(p.getCmd(), p.getArguments());
+                if(p.parse(instruction))
+                {
+                    if(instruction.indexOf(">>") > 0) 
+                    {
+                        t.toFile = 1;
+                    } 
+                    else if(instruction.indexOf(">") > 0) 
+                    {
+                        t.toFile = 2;
+                    }
+                    
+                    if (t.toFile > 0) 
+                        t.currentPathToFile = p.getArguments().get(p.getArguments().size() - 1) ;
+                    
+                    t.run(p.getCmd(), p.getArguments());
+                }
             }
         }
     }

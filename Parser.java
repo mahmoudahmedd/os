@@ -7,6 +7,7 @@ package commandlineiinterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.util.Pair;
 
 /**
  *
@@ -16,28 +17,10 @@ public class Parser
 {
     private ArrayList<String> args;   // Will be filled by arguments extracted by parse method
     private String cmd;      // Will be filled by the command extracted by parse method
-    private ArrayList<String> commands;
-    private boolean flag;
-    private int toFile;
-    
+
     public Parser()
     {
-        commands = new ArrayList<String>();
-        
-        commands.add("cd");
-        commands.add("ls");
-        commands.add("cp");
-        commands.add("cat");
-        commands.add("more");
-        commands.add("mkdir");
-        commands.add("rmdir");
-        commands.add("mv");
-        commands.add("rm");
-        commands.add("args");
-        commands.add("date");
-        commands.add("help");
-        commands.add("pwd"); 
-        commands.add("clear");
+        args = new ArrayList<String>();
     }
     
     /**
@@ -66,41 +49,225 @@ public class Parser
             _input = _input.trim();
         }
 
-        if (_input.indexOf("more") > 0) 
-        {
-            this.flag = true;
-        } 
 
-        String[] instructions = _input.split("\\|");
-        for (String instruction : instructions) 
-        {
-            instruction = instruction.trim();
-
-            if (instruction.indexOf(">>") > 0) 
-            {
-                this.toFile = 1;
-            } 
-            else if (instruction.indexOf(">") > 0) 
-            {
-                this.toFile = 2;
-            }
-
-            //to remove white spaces of entire commands
-            String[] parts = instruction.split(" ");
+        if (_input.indexOf('"') == -1) 
+        {   
+            String[] parts = _input.split(" ");
             this.cmd = parts[0];
-            
+
             for(int i = 1;i < parts.length;i++) 
             {
                 this.args.add(parts[i]);
             }
-
-            if(commands.indexOf(cmd) == -1)
+        }
+        else
+        {
+            String[] parts = _input.split(" ", 2);
+            this.cmd = parts[0];
+            
+            
+            if(parts.length > 1)
             {
-                System.out.println("Parser::parse(String): ERROR - Command not found");
+                parts[1] = parts[1].trim();
+                parts[1] = parts[1].substring(1, parts[1].length() - 1);;
+                parts[1] = parts[1].trim();
+                
+                this.args.add(parts[1]);
+            }
+        }
+        
+        boolean f = false;
+        
+        if(args.contains(">>") || args.contains(">")) 
+        {
+            f = true;
+        } 
+
+        if(this.cmd.equals("cd"))
+        {
+            if(this.args.size() == 1)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - cd requires 1 argument");
                 return false;
             }
         }
-        return true;
+        else if(this.cmd.equals("ls"))
+        {
+            if(this.args.size() == 0 || this.args.size() == 1 || f)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - ls requires 0 or 1 arguments");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("cp"))
+        {
+            if(this.args.size() == 2)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - cp requires 2 arguments");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("cat"))
+        {
+            if(this.args.size() == 1 || this.args.size() == 2 || f)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - cat requires 1 or 2 arguments");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("more"))
+        {
+            if(this.args.size() == 1)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - more requires 1 arguments");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("mkdir"))
+        {
+            if(this.args.size() == 1)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - mkdir requires 1 argument");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("rmdir"))
+        {
+            if(this.args.size() == 1)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - rmdir requires 1 argument");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("mv"))
+        {
+            if(this.args.size() == 2)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - mv requires 2 arguments");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("rm"))
+        {
+            if(this.args.size() == 1)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - rm requires 1 argument");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("args"))
+        {
+            if(this.args.size() == 0)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - args requires 0 argument");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("date"))
+        {
+            if(this.args.size() == 0)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - date requires 0 argument");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("help"))
+        {
+            if(this.args.size() == 0 || f)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - help requires 0 argument");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("exit"))
+        {
+            if(this.args.size() == 0)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - exit requires 0 argument");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("pwd"))
+        {
+            if(this.args.size() == 0 || f)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - pwd requires 0 argument");
+                return false;
+            }
+        }
+        else if(this.cmd.equals("clear"))
+        {
+            if(this.args.size() == 0)
+            {
+                return true;
+            }
+            else
+            {
+                System.out.println("Parser::parse(String): ERROR - clear requires 0 argument");
+                return false;
+            }
+        }
+        else
+        {
+            System.out.println("Parser::parse(String): ERROR - Command not found");
+            return false;
+        }
     }
 
     public String getCmd()
