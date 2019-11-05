@@ -1,14 +1,10 @@
 package AssignmentPackage;
 
 public class Router {
-    public synchronized void connect(){
-
+    int size;
+    Semaphore s = new Semaphore (size);
+    Router(int n){
+        this.size = n;
     }
-    public synchronized void performOnlineActivity(){
-
-    }
-    public synchronized void logOut(){
-
-    }
-
+    
 }
