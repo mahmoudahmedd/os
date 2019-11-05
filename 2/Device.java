@@ -1,5 +1,10 @@
 package AssignmentPackage;
 
-public class Device {
+public class Device extends Thread {
     Semaphore s = new Semaphore ();
+
+    public void run(){
+
+    }
 }
+
