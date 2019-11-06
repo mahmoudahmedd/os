@@ -1,0 +1,1 @@
+extends Thread vs implements runnable
