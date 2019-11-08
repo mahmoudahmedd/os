@@ -1,12 +1,62 @@
-package AssignmentPackage;
+package cli;
 
-public class Router {
-    public int maxConnections;
-    //Semaphore s = new Semaphore (size);
-    Router(int n){
-        maxConnections = n;
+import java.util.Vector;
+
+public class Router 
+{
+    public Vector<String> devices;
+    public Boolean[]      availableConnections;
+    public Semaphore      semaphore;
+    public int            size;
+    
+    public Router(int _size, Vector<String> _devices) 
+    {
+        this.devices              = _devices;
+        this.semaphore            = new Semaphore(_size);
+        this.availableConnections = new Boolean[_size];
+        this.size                 = _size; 
+        
+        for(int i = 0; i < _size; i++) 
+        {
+            availableConnections[i] = true;
+        }
+    }
+    
+    public int occupyConnection(Device _device) 
+    {
+        semaphore.P(_device);
+        
+        int connectedDeviceNumber = 0;
+        
+        for(int i = 0; i < availableConnections.length; i++) 
+        {
+            if(availableConnections[i]) 
+            {
+                connectedDeviceNumber = i + 1;
+                availableConnections[i] = false;
+                break;
+            }
+        }
+        
+        return connectedDeviceNumber;
     }
 
-    Thread[] connections = new Thread[maxConnections]; //create an array of thread and its size is the max number of connections
-
+    public void releaseConnection(int _connectedDeviceNumber) 
+    {
+        availableConnections[_connectedDeviceNumber - 1] = true;
+        semaphore.V();
+    }
+    
+    public void run() 
+    {
+        
+        for(int i = 0;i < devices.size();i++) 
+        {
+            String deviceName = devices.get(i).split(" ")[0];
+            String deviceType = devices.get(i).split(" ")[1];
+            
+            (new Thread(new Device(deviceName, deviceType, this))).start();
+        }
+    }
+    
 }
