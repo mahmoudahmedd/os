@@ -21,6 +21,7 @@ public class Semaphore
         {
             try 
             { 
+                Window.textArea.append("- " + _device.getDeviceName() + "(" + _device.getDeviceType() + ") arrived and waiting." + Window.newline);
                 System.out.println("- " + _device.getDeviceName() + "(" + _device.getDeviceType() + ") arrived and waiting.");
                 wait();
             }
@@ -31,6 +32,7 @@ public class Semaphore
         }
         else
         {
+            Window.textArea.append("- " + _device.getDeviceName() + "(" + _device.getDeviceType() + ") arrived." + Window.newline);
             System.out.println("- " + _device.getDeviceName() + "(" + _device.getDeviceType() + ") arrived.");
         }
     }

@@ -5,6 +5,8 @@ public class Network
 {
     public static void main(String[] args) 
     {
+        Window window = new Window();
+         
         Scanner scannerInt     = new Scanner(System.in);
         Scanner scannerString  = new Scanner(System.in);
         Vector<String> devices = new Vector<>();

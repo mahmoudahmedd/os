@@ -55,6 +55,7 @@ public class Device extends Thread
     
     public void connect(int _connectedDeviceNumber)
     {
+        Window.textArea.append("- Connection " + _connectedDeviceNumber + ": " + this.deviceName + " Occupied." + Window.newline);
         System.out.println("- Connection " + _connectedDeviceNumber + ": " + this.deviceName + " Occupied.");
         this.writeLog("- Connection " + _connectedDeviceNumber + ": " + this.deviceName + " Occupied.");
                 
@@ -70,6 +71,7 @@ public class Device extends Thread
     
     public void performOnlineActivity(int _connectedDeviceNumber)
     {
+        Window.textArea.append("- Connection " + _connectedDeviceNumber + ": " + this.deviceName + " Performs online activity." + Window.newline);
         System.out.println("- Connection " + _connectedDeviceNumber + ": " + this.deviceName + " Performs online activity.");
         this.writeLog("- Connection " + _connectedDeviceNumber + ": " + this.deviceName + " Performs online activity.");
         
@@ -85,6 +87,7 @@ public class Device extends Thread
     
     public void logout(int _connectedDeviceNumber)
     {
+        Window.textArea.append("- Connection " + _connectedDeviceNumber + ": " + this.deviceName + " Logged out." + Window.newline);
         System.out.println("- Connection " + _connectedDeviceNumber + ": " + this.deviceName + " Logged out.");
         this.writeLog("- Connection " + _connectedDeviceNumber + ": " + this.deviceName + " Logged out.");
         
